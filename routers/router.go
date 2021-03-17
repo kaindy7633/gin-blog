@@ -25,7 +25,7 @@ func InitRouter() *gin.Engine {
 	{
 		//获取标签列表
 		apiv1.GET("/tags", v1.GetTags)
-		// //新建标签
+		//新建标签
 		// apiv1.POST("/tags", v1.AddTag)
 		// //更新指定标签
 		// apiv1.PUT("/tags/:id", v1.EditTag)

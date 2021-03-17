@@ -9,7 +9,10 @@
 package tag_service
 
 import (
+	"encoding/json"
 	"gin-blog/models"
+	"gin-blog/pkg/gredis"
+	"gin-blog/service/cache_service"
 )
 
 type Tag struct {
@@ -57,25 +60,25 @@ type Tag struct {
 
 // 获取所有标签数据
 func (t *Tag) GetAll() ([]models.Tag, error) {
-	// var tags, cacheTags []models.Tag
-	var tags []models.Tag
+	var tags, cacheTags []models.Tag
 
-	// cache := cache_service.Tag{
-	// 	State:    t.State,
-	// 	PageNum:  t.PageNum,
-	// 	PageSize: t.PageSize,
-	// }
+	// 先从 Redis 中读取缓存数据
+	cache := cache_service.Tag{
+		State: t.State,
 
-	// key := cache.GetTagsKey()
-	// if gredis.Exists(key) {
-	// 	data, err := gredis.Get(key)
-	// 	if err != nil {
-	// 		logging.Info(err)
-	// 	} else {
-	// 		json.Unmarshal(data, &cacheTags)
-	// 		return cacheTags, nil
-	// 	}
-	// }
+		PageNum:  t.PageNum,
+		PageSize: t.PageSize,
+	}
+	key := cache.GetTagsKey()
+	if gredis.Exists(key) {
+		data, err := gredis.Get(key)
+		if err != nil {
+			logging.Info(err)
+		} else {
+			json.Unmarshal(data, &cacheTags)
+			return cacheTags, nil
+		}
+	}
 
 	tags, err := models.GetTags(t.PageNum, t.PageSize, t.getMaps())
 	if err != nil {
