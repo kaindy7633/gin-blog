@@ -5,4 +5,4 @@ Get http://localhost:8000/api/v1/tags HTTP/1.1
 POST http://localhost:8000/api/v1/tags HTTP/1.1
 content-type: application/json
 
-{ "name": "css", "state": 0, "created_by": "Kaindy Liu" }
+{ "name": "html5", "state": 0, "created_by": "Kaindy Liu" }

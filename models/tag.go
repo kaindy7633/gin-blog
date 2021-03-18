@@ -7,6 +7,8 @@
  */
 package models
 
+import "gorm.io/gorm"
+
 type Tag struct {
 	Model
 
@@ -21,19 +23,19 @@ type Tag struct {
  * @param {string} name
  * @return {(bool error)}
  */
-// func ExistTagByName(name string) (bool, error) {
-// 	var tag Tag
-// 	err := db.Select("id").Where("name = ? and deleted_on = ?", name, 0).First(&tag).Error
-// 	if err != nil && err != gorm.ErrRecordNotFound {
-// 		return false, err
-// 	}
+func ExistTagByName(name string) (bool, error) {
+	var tag Tag
+	err := db.Select("id").Where("name = ? and deleted_at = ?", name, 0).First(&tag).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return false, err
+	}
 
-// 	if tag.ID > 0 {
-// 		return true, nil
-// 	}
+	if tag.ID > 0 {
+		return true, nil
+	}
 
-// 	return false, nil
-// }
+	return false, nil
+}
 
 // func ExistTagByID(id int) (bool, error) {
 // 	var tag Tag
@@ -56,19 +58,19 @@ type Tag struct {
  * @param {string} createBy
  * @return {error}
  */
-// func AddTag(name string, state int, createdBy string) error {
-// 	tag := Tag{
-// 		Name:      name,
-// 		State:     state,
-// 		CreatedBy: createdBy,
-// 	}
+func AddTag(name string, state int, createdBy string) error {
+	tag := Tag{
+		Name:      name,
+		State:     state,
+		CreatedBy: createdBy,
+	}
 
-// 	if err := db.Create(&tag).Error; err != nil {
-// 		return err
-// 	}
+	if err := db.Create(&tag).Error; err != nil {
+		return err
+	}
 
-// 	return nil
-// }
+	return nil
+}
 
 // 批量获取标签
 func GetTags(pageNum int, pageSize int, maps interface{}) (tags []Tag, err error) {
@@ -77,13 +79,13 @@ func GetTags(pageNum int, pageSize int, maps interface{}) (tags []Tag, err error
 }
 
 // 获取标签总数量
-// func GetTagTotal(maps interface{}) (count int64, err error) {
-// 	err = db.Model(&Tag{}).Where(maps).Count(&count).Error
-// 	if err != nil {
-// 		return 0, err
-// 	}
-// 	return
-// }
+func GetTagTotal(maps interface{}) (count int64, err error) {
+	err = db.Model(&Tag{}).Where(maps).Count(&count).Error
+	if err != nil {
+		return 0, err
+	}
+	return
+}
 
 // // EditTag modify a single tag
 // func EditTag(id int, data interface{}) error {

@@ -12,6 +12,7 @@ import (
 	"encoding/json"
 	"gin-blog/models"
 	"gin-blog/pkg/gredis"
+	"gin-blog/pkg/logging"
 	"gin-blog/service/cache_service"
 )
 
@@ -27,9 +28,9 @@ type Tag struct {
 }
 
 // 通过 Name 判断标签名是否已存在
-// func (t *Tag) ExistByName() (bool, error) {
-// 	return models.ExistTagByName(t.Name)
-// }
+func (t *Tag) ExistByName() (bool, error) {
+	return models.ExistTagByName(t.Name)
+}
 
 // // 通过 ID 判断标签是否已存在
 // func (t *Tag) ExistByID() (bool, error) {
@@ -37,9 +38,9 @@ type Tag struct {
 // }
 
 // // 添加标签
-// func (t *Tag) Add() error {
-// 	return models.AddTag(t.Name, t.State, t.CreatedBy)
-// }
+func (t *Tag) Add() error {
+	return models.AddTag(t.Name, t.State, t.CreatedBy)
+}
 
 // 编辑标签
 // func (t *Tag) Edit() error {
@@ -54,9 +55,9 @@ type Tag struct {
 // }
 
 // 获取标签数量
-// func (t *Tag) Count() (int64, error) {
-// 	return models.GetTagTotal(t.getMaps())
-// }
+func (t *Tag) Count() (int64, error) {
+	return models.GetTagTotal(t.getMaps())
+}
 
 // 获取所有标签数据
 func (t *Tag) GetAll() ([]models.Tag, error) {
@@ -75,7 +76,9 @@ func (t *Tag) GetAll() ([]models.Tag, error) {
 		if err != nil {
 			logging.Info(err)
 		} else {
-			json.Unmarshal(data, &cacheTags)
+			if err := json.Unmarshal(data, &cacheTags); err != nil {
+				logging.Error(err)
+			}
 			return cacheTags, nil
 		}
 	}
@@ -92,7 +95,7 @@ func (t *Tag) GetAll() ([]models.Tag, error) {
 // ...
 func (t *Tag) getMaps() map[string]interface{} {
 	maps := make(map[string]interface{})
-	maps["deleted_on"] = 0
+	maps["deleted_at"] = 0
 	if t.Name != "" {
 		maps["name"] = t.Name
 	}
