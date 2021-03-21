@@ -37,19 +37,19 @@ func ExistTagByName(name string) (bool, error) {
 	return false, nil
 }
 
-// func ExistTagByID(id int) (bool, error) {
-// 	var tag Tag
-// 	err := db.Select("id").Where("id = ? and deleted_on = ?", id, 0).First(&tag).Error
-// 	if err != nil && err != gorm.ErrRecordNotFound {
-// 		return false, err
-// 	}
+func ExistTagByID(id int) (bool, error) {
+	var tag Tag
+	err := db.Select("id").Where("id = ? and deleted_on = ?", id, 0).First(&tag).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return false, err
+	}
 
-// 	if tag.ID > 0 {
-// 		return true, nil
-// 	}
+	if tag.ID > 0 {
+		return true, nil
+	}
 
-// 	return false, nil
-// }
+	return false, nil
+}
 
 /**
  * @description: 添加标签
@@ -88,10 +88,10 @@ func GetTagTotal(maps interface{}) (count int64, err error) {
 }
 
 // // EditTag modify a single tag
-// func EditTag(id int, data interface{}) error {
-// 	if err := db.Model(&Tag{}).Where("id = ? and deleted_on = ?", id, 0).Updates(data).Error; err != nil {
-// 		return err
-// 	}
+func EditTag(id int, data interface{}) error {
+	if err := db.Model(&Tag{}).Where("id = ? and deleted_on = ?", id, 0).Updates(data).Error; err != nil {
+		return err
+	}
 
-// 	return nil
-// }
+	return nil
+}

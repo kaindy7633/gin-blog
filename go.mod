@@ -25,6 +25,7 @@ require (
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/spf13/cobra v1.1.3 // indirect
 	github.com/ugorji/go v1.2.4 // indirect
+	github.com/unknwon/com v1.0.1 // indirect
 	go.starlark.net v0.0.0-20210312235212-74c10e2c17dc // indirect
 	golang.org/x/arch v0.0.0-20210315020452-ea130f1b0a00 // indirect
 	golang.org/x/crypto v0.0.0-20210314154223-e6e6c4f2bb5b // indirect

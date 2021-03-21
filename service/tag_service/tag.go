@@ -32,10 +32,10 @@ func (t *Tag) ExistByName() (bool, error) {
 	return models.ExistTagByName(t.Name)
 }
 
-// // 通过 ID 判断标签是否已存在
-// func (t *Tag) ExistByID() (bool, error) {
-// 	return models.ExistTagByID(t.ID)
-// }
+// 通过 ID 判断标签是否已存在
+func (t *Tag) ExistByID() (bool, error) {
+	return models.ExistTagByID(t.ID)
+}
 
 // // 添加标签
 func (t *Tag) Add() error {
@@ -43,16 +43,16 @@ func (t *Tag) Add() error {
 }
 
 // 编辑标签
-// func (t *Tag) Edit() error {
-// 	data := make(map[string]interface{})
-// 	data["modified_by"] = t.ModifiedBy
-// 	data["name"] = t.Name
-// 	if t.State >= 0 {
-// 		data["state"] = t.State
-// 	}
+func (t *Tag) Edit() error {
+	data := make(map[string]interface{})
+	data["modified_by"] = t.ModifiedBy
+	data["name"] = t.Name
+	if t.State >= 0 {
+		data["state"] = t.State
+	}
 
-// 	return models.EditTag(t.ID, data)
-// }
+	return models.EditTag(t.ID, data)
+}
 
 // 获取标签数量
 func (t *Tag) Count() (int64, error) {
