@@ -5,10 +5,16 @@ Get http://localhost:8000/api/v1/tags HTTP/1.1
 POST http://localhost:8000/api/v1/tags HTTP/1.1
 content-type: application/json
 
-{ "name": "golang", "state": 0, "created_by": "Kaindy" }
+{ "name": "css", "state": 0, "created_by": "MMQQ1" }
 
 ### 编辑标签
-PUT http://localhost:8000/api/v1/tags/5 HTTP/1.1
+PUT http://localhost:8000/api/v1/tags/8 HTTP/1.1
 content-type: application/json
 
-{ "name": "Golang", "state": 0, "modified_by": "LiuZhen" }
+{ "name": "CSS", "state": 0, "modified_by": "LIUZHEN_K" }
+
+### 删除标签
+DELETE http://localhost:8000/api/v1/tags/7 HTTP/1.1
+content-type: application/json
+
+{}

@@ -39,7 +39,7 @@ func ExistTagByName(name string) (bool, error) {
 
 func ExistTagByID(id int) (bool, error) {
 	var tag Tag
-	err := db.Select("id").Where("id = ? and deleted_on = ?", id, 0).First(&tag).Error
+	err := db.Select("id").Where("id = ? and deleted_at = ?", id, 0).First(&tag).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return false, err
 	}
@@ -87,11 +87,19 @@ func GetTagTotal(maps interface{}) (count int64, err error) {
 	return
 }
 
-// // EditTag modify a single tag
+// EditTag modify a single tag
 func EditTag(id int, data interface{}) error {
-	if err := db.Model(&Tag{}).Where("id = ? and deleted_on = ?", id, 0).Updates(data).Error; err != nil {
+	if err := db.Model(&Tag{}).Where("id = ? and deleted_at = ?", id, 0).Updates(data).Error; err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// DeleteTag delete a tag
+func DeleteTag(id int) error {
+	if err := db.Where("id = ?", id).Delete(&Tag{}).Error; err != nil {
+		return err
+	}
 	return nil
 }

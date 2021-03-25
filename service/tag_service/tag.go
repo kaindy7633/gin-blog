@@ -92,6 +92,11 @@ func (t *Tag) GetAll() ([]models.Tag, error) {
 	return tags, nil
 }
 
+// 删除标签
+func (t *Tag) Delete() error {
+	return models.DeleteTag(t.ID)
+}
+
 // ...
 func (t *Tag) getMaps() map[string]interface{} {
 	maps := make(map[string]interface{})
