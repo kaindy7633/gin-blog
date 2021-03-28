@@ -36,8 +36,8 @@ func InitRouter() *gin.Engine {
 		// //导入标签
 		// r.POST("/tags/import", v1.ImportTag)
 
-		// //获取文章列表
-		// apiv1.GET("/articles", v1.GetArticles)
+		//获取文章列表
+		apiv1.GET("/articles", v1.GetArticles)
 		// //获取指定文章
 		// apiv1.GET("/articles/:id", v1.GetArticle)
 		// //新建文章
