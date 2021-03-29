@@ -17,6 +17,21 @@ type Article struct {
 	State         int    `gorm:"state" json:"state"`
 }
 
+// ExistArticleByID checks if an article exists based on ID
+func ExistArticleByID(id int) (bool, error) {
+	var article Article
+	err := db.Select("id").Where("id = ? AND deleted_at = ?", id, 0).First(&article).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return false, err
+	}
+
+	if article.ID > 0 {
+		return true, nil
+	}
+
+	return false, nil
+}
+
 // GetArticleTotal gets the total number of articles based on the constraints
 func GetArticleTotal(maps interface{}) (int64, error) {
 	var count int64
@@ -35,4 +50,19 @@ func GetArticles(pageNum int, pageSize int, maps interface{}) ([]*Article, error
 		return nil, err
 	}
 	return articles, nil
+}
+
+// GetArticle Get a single article based on ID
+func GetArticle(id int) (*Article, error) {
+	var article Article
+	err := db.Where("id = ? AND deleted_at = ?", id, 0).First(&article).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, err
+	}
+
+	err = db.Model(&article).Related(&article.Tag).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, err
+	}
+	return &article, nil
 }

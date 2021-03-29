@@ -23,6 +23,11 @@ type Article struct {
 	PageSize int
 }
 
+// 通过id查找文章是否存在
+func (a *Article) ExistByID() (bool, error) {
+	return models.ExistArticleByID(a.ID)
+}
+
 // 获取所有文章
 func (a *Article) GetAll() ([]*models.Article, error) {
 	var (
@@ -61,6 +66,31 @@ func (a *Article) GetAll() ([]*models.Article, error) {
 // 获取文章数量
 func (a *Article) Count() (int64, error) {
 	return models.GetArticleTotal(a.getMaps())
+}
+
+// 获取指定的文章
+func (a *Article) Get() (*models.Article, error) {
+	var cacheArticle *models.Article
+
+	cache := cache_service.Article{ID: a.ID}
+	key := cache.GetArticleKey()
+	if gredis.Exists(key) {
+		data, err := gredis.Get(key)
+		if err != nil {
+			logging.Info(err)
+		} else {
+			json.Unmarshal(data, &cacheArticle)
+			return cacheArticle, nil
+		}
+	}
+
+	article, err := models.GetArticle(a.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	gredis.Set(key, article, 3600)
+	return article, nil
 }
 
 func (a *Article) getMaps() map[string]interface{} {

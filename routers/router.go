@@ -39,7 +39,7 @@ func InitRouter() *gin.Engine {
 		//获取文章列表
 		apiv1.GET("/articles", v1.GetArticles)
 		// //获取指定文章
-		// apiv1.GET("/articles/:id", v1.GetArticle)
+		apiv1.GET("/articles/:id", v1.GetArticle)
 		// //新建文章
 		// apiv1.POST("/articles", v1.AddArticle)
 		// //更新指定文章

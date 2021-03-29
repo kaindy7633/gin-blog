@@ -61,3 +61,40 @@ func GetArticles(c *gin.Context) {
 
 	appG.Response(http.StatusOK, e.SUCCESS, data)
 }
+
+// 获取指定id的文章
+func GetArticle(c *gin.Context) {
+	// 获取id
+	appG := app.Gin{C: c}
+	id := com.StrTo(c.Param("id")).MustInt()
+
+	// 验证
+	valid := validation.Validation{}
+	valid.Min(id, 1, "id")
+
+	if valid.HasErrors() {
+		app.MarkErrors(valid.Errors)
+		appG.Response(http.StatusBadRequest, e.INVALID_PARAMS, nil)
+		return
+	}
+
+	articleService := article_service.Article{ID: id}
+	exists, err := articleService.ExistByID()
+	if err != nil {
+		appG.Response(http.StatusInternalServerError, e.ERROR_CHECK_EXIST_ARTICLE_FAIL, nil)
+		return
+	}
+
+	if !exists {
+		appG.Response(http.StatusOK, e.ERROR_NOT_EXIST_ARTICLE, nil)
+		return
+	}
+
+	article, err := articleService.Get()
+	if err != nil {
+		appG.Response(http.StatusInternalServerError, e.ERROR_GET_ARTICLES_FAIL, nil)
+		return
+	}
+
+	appG.Response(http.StatusOK, e.SUCCESS, article)
+}
