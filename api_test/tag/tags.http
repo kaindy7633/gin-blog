@@ -25,4 +25,26 @@ content-type: application/json
 GET http://localhost:8000/api/v1/articles HTTP/1.1
 
 ### 获取某篇文章
-GET http://localhost:8000/api/v1/articles/1 HTTP/1.1
+GET http://localhost:8000/api/v1/articles/2 HTTP/1.1
+
+### 添加文章
+POST http://localhost:8000/api/v1/articles HTTP/1.1
+content-type: application/json
+
+{ 
+  "tag_id": 5,
+  "title": "Golang的一篇文章",
+  "desc": "Golang的一篇文章",
+  "content": "Golang是一门新的编程语言，是由Google维护的，开源的！",
+  "created_by": "Kaindy Liu",
+  "state": 0
+}
+
+# { 
+#   "tag_id": 3,
+#   "title": "添加文章",
+#   "desc": "添加文章",
+#   "content": "这是第一个被添加的文章",
+#   "created_by": "Liuzhen",
+#   "state": 0
+# }

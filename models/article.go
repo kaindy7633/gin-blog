@@ -8,13 +8,12 @@ type Article struct {
 	TagID int `gorm:"index" json:"tag_id"`
 	Tag   Tag `gorm:"foreignkey:TagID" json:"tag"`
 
-	Title         string `gorm:"title" json:"title"`
-	Desc          string `gorm:"desc" json:"desc"`
-	Content       string `gorm:"content" json:"content"`
-	CoverImageUrl string `gorm:"cover_image_url" json:"cover_image_url"`
-	CreatedBy     string `gorm:"created_by" json:"created_by"`
-	ModifiedBy    string `gorm:"modified_by" json:"modified_by"`
-	State         int    `gorm:"state" json:"state"`
+	Title      string `gorm:"title" json:"title"`
+	Desc       string `gorm:"desc" json:"desc"`
+	Content    string `gorm:"content" json:"content"`
+	CreatedBy  string `gorm:"created_by" json:"created_by"`
+	ModifiedBy string `gorm:"modified_by" json:"modified_by"`
+	State      int    `gorm:"state" json:"state"`
 }
 
 // ExistArticleByID checks if an article exists based on ID
@@ -66,4 +65,22 @@ func GetArticle(id int) (*Article, error) {
 		return nil, err
 	}
 	return &article, nil
+}
+
+// AddArticle add a single article
+func AddArticle(data map[string]interface{}) error {
+	article := Article{
+		TagID:     data["tag_id"].(int),
+		Title:     data["title"].(string),
+		Desc:      data["desc"].(string),
+		Content:   data["content"].(string),
+		CreatedBy: data["created_by"].(string),
+		State:     data["state"].(int),
+	}
+
+	if err := db.Create(&article).Error; err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -93,6 +93,24 @@ func (a *Article) Get() (*models.Article, error) {
 	return article, nil
 }
 
+// 添加新的文章
+func (a *Article) Add() error {
+	article := map[string]interface{}{
+		"tag_id":     a.TagID,
+		"title":      a.Title,
+		"desc":       a.Desc,
+		"content":    a.Content,
+		"created_by": a.CreatedBy,
+		"state":      a.State,
+	}
+
+	if err := models.AddArticle(article); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (a *Article) getMaps() map[string]interface{} {
 	maps := make(map[string]interface{})
 	maps["deleted_at"] = 0

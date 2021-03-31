@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"fmt"
 	"gin-blog/pkg/app"
 	"gin-blog/pkg/e"
 	"gin-blog/pkg/setting"
@@ -91,7 +90,6 @@ func AddTag(c *gin.Context) {
 
 	// 执行添加标签操作
 	err = tagService.Add()
-	fmt.Println(err)
 	if err != nil {
 		appG.Response(http.StatusInternalServerError, e.ERROR_ADD_TAG_FAIL, nil)
 		return

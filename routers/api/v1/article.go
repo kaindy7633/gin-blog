@@ -1,11 +1,13 @@
 package v1
 
 import (
+	"fmt"
 	"gin-blog/pkg/app"
 	"gin-blog/pkg/e"
 	"gin-blog/pkg/setting"
 	"gin-blog/pkg/util"
 	"gin-blog/service/article_service"
+	"gin-blog/service/tag_service"
 	"net/http"
 
 	"github.com/beego/beego/v2/core/validation"
@@ -97,4 +99,59 @@ func GetArticle(c *gin.Context) {
 	}
 
 	appG.Response(http.StatusOK, e.SUCCESS, article)
+}
+
+// 新建文章结构体
+type AddArticleForm struct {
+	TagID     int    `form:"tag_id" json:"tag_id" valid:"Required;Min(1)"`
+	Title     string `form:"title" json:"title" valid:"Required;MaxSize(100)"`
+	Desc      string `form:"desc" json:"desc" valid:"Required;MaxSize(255)"`
+	Content   string `form:"content" json:"content" valid:"Required;MaxSize(65535)"`
+	CreatedBy string `form:"created_by" json:"created_by" valid:"Required;MaxSize(100)"`
+	State     int    `form:"state" json:"state" valid:"Range(0,1)"`
+}
+
+// 新建文章
+func AddArticle(c *gin.Context) {
+	var (
+		appG = app.Gin{C: c}
+		form AddArticleForm
+	)
+
+	httpCode, errCode := app.BindAndValid(c, &form)
+	fmt.Printf("%#v, %#v\n", httpCode, errCode)
+	fmt.Println(form)
+	if errCode != e.SUCCESS {
+		appG.Response(httpCode, errCode, nil)
+		return
+	}
+
+	tagService := tag_service.Tag{ID: form.TagID}
+	exists, err := tagService.ExistByID()
+	if err != nil {
+		appG.Response(http.StatusInternalServerError, e.ERROR_EXIST_TAG_FAIL, nil)
+		return
+	}
+
+	if !exists {
+		appG.Response(http.StatusOK, e.ERROR_NOT_EXIST_TAG, nil)
+		return
+	}
+
+	articleService := article_service.Article{
+		TagID:     form.TagID,
+		Title:     form.Title,
+		Desc:      form.Desc,
+		Content:   form.Content,
+		State:     form.State,
+		CreatedBy: form.CreatedBy,
+	}
+
+	if err := articleService.Add(); err != nil {
+		appG.Response(http.StatusInternalServerError, e.ERROR_ADD_ARTICLE_FAIL, nil)
+		return
+	}
+
+	appG.Response(http.StatusOK, e.SUCCESS, nil)
+
 }
