@@ -22,4 +22,7 @@ content-type: application/json
 
 ### ======================= Articles 模块 ===============================
 ### 获取所有文章列表
-Get http://localhost:8000/api/v1/articles HTTP/1.1
+GET http://localhost:8000/api/v1/articles HTTP/1.1
+
+### 获取某篇文章
+GET http://localhost:8000/api/v1/articles/1 HTTP/1.1

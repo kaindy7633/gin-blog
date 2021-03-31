@@ -6,7 +6,7 @@ type Article struct {
 	Model
 
 	TagID int `gorm:"index" json:"tag_id"`
-	Tag   Tag `json:"tag"`
+	Tag   Tag `gorm:"foreignkey:TagID" json:"tag"`
 
 	Title         string `gorm:"title" json:"title"`
 	Desc          string `gorm:"desc" json:"desc"`
@@ -60,7 +60,8 @@ func GetArticle(id int) (*Article, error) {
 		return nil, err
 	}
 
-	err = db.Model(&article).Related(&article.Tag).Error
+	// err = db.Model(&article).Related(&article.Tag).Error
+	err = db.Preload("Tag").Find(&article).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}
