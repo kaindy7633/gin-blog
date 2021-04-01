@@ -84,3 +84,11 @@ func AddArticle(data map[string]interface{}) error {
 
 	return nil
 }
+
+// EditArticle modify a single article
+func EditArticle(id int, data interface{}) error {
+	if err := db.Model(&Article{}).Where("id = ? AND deleted_at = ?", id, 0).Updates(data).Error; err != nil {
+		return err
+	}
+	return nil
+}

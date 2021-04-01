@@ -111,6 +111,18 @@ func (a *Article) Add() error {
 	return nil
 }
 
+// 编辑文章
+func (a *Article) Edit() error {
+	return models.EditArticle(a.ID, map[string]interface{}{
+		"tag_id":      a.TagID,
+		"title":       a.Title,
+		"desc":        a.Desc,
+		"content":     a.Content,
+		"modified_by": a.ModifiedBy,
+		"state":       a.State,
+	})
+}
+
 func (a *Article) getMaps() map[string]interface{} {
 	maps := make(map[string]interface{})
 	maps["deleted_at"] = 0

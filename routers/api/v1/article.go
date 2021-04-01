@@ -155,3 +155,70 @@ func AddArticle(c *gin.Context) {
 	appG.Response(http.StatusOK, e.SUCCESS, nil)
 
 }
+
+// 更新文章结构体
+type EditArticleForm struct {
+	ID         int    `form:"id" json:"id" valid:"Required;Min(1)"`
+	TagID      int    `form:"tag_id" json:"tag_id" valid:"Required;Min(1)"`
+	Title      string `form:"title" json:"title" valid:"Required;MaxSize(100)"`
+	Desc       string `form:"desc" json:"desc" valid:"Required;MaxSize(255)"`
+	Content    string `form:"content" json:"content" valid:"Required;MaxSize(65535)"`
+	ModifiedBy string `form:"modified_by" json:"modified_by" valid:"Required;MaxSize(100)"`
+	State      int    `form:"state" json:"state" valid:"Range(0,1)"`
+}
+
+func EditArticle(c *gin.Context) {
+	var (
+		appG = app.Gin{C: c}
+		form = EditArticleForm{ID: com.StrTo(c.Param("id")).MustInt()}
+	)
+
+	httpCode, errCode := app.BindAndValid(c, &form)
+	fmt.Printf("%#v %#v\n", httpCode, errCode)
+	fmt.Println(form)
+	if errCode != e.SUCCESS {
+		appG.Response(httpCode, errCode, nil)
+		return
+	}
+
+	articleService := article_service.Article{
+		ID:         form.ID,
+		TagID:      form.TagID,
+		Title:      form.Title,
+		Desc:       form.Desc,
+		Content:    form.Content,
+		ModifiedBy: form.ModifiedBy,
+		State:      form.State,
+	}
+
+	exists, err := articleService.ExistByID()
+	if err != nil {
+		appG.Response(http.StatusInternalServerError, e.ERROR_CHECK_EXIST_ARTICLE_FAIL, nil)
+		return
+	}
+
+	if !exists {
+		appG.Response(http.StatusOK, e.ERROR_NOT_EXIST_ARTICLE, nil)
+		return
+	}
+
+	tagService := tag_service.Tag{ID: form.TagID}
+	exists, err = tagService.ExistByID()
+	if err != nil {
+		appG.Response(http.StatusInternalServerError, e.ERROR_EXIST_TAG_FAIL, nil)
+		return
+	}
+
+	if !exists {
+		appG.Response(http.StatusOK, e.ERROR_NOT_EXIST_TAG, nil)
+		return
+	}
+
+	err = articleService.Edit()
+	if err != nil {
+		appG.Response(http.StatusInternalServerError, e.ERROR_EDIT_ARTICLE_FAIL, nil)
+		return
+	}
+
+	appG.Response(http.StatusOK, e.SUCCESS, nil)
+}
