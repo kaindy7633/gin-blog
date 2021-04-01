@@ -123,6 +123,11 @@ func (a *Article) Edit() error {
 	})
 }
 
+// 删除文章
+func (a *Article) Delete() error {
+	return models.DeleteArticle(a.ID)
+}
+
 func (a *Article) getMaps() map[string]interface{} {
 	maps := make(map[string]interface{})
 	maps["deleted_at"] = 0

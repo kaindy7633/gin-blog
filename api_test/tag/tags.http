@@ -53,12 +53,8 @@ content-type: application/json
   "state": 0
 }
 
+### 删除文章
+DELETE http://localhost:8000/api/v1/articles/2 HTTP/1.1
+content-type: application/json
 
-# { 
-#   "tag_id": 3,
-#   "title": "添加文章",
-#   "desc": "添加文章",
-#   "content": "这是第一个被添加的文章",
-#   "created_by": "Liuzhen",
-#   "state": 0
-# }
+{}

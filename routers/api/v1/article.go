@@ -167,6 +167,7 @@ type EditArticleForm struct {
 	State      int    `form:"state" json:"state" valid:"Range(0,1)"`
 }
 
+// 更新文章
 func EditArticle(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -217,6 +218,42 @@ func EditArticle(c *gin.Context) {
 	err = articleService.Edit()
 	if err != nil {
 		appG.Response(http.StatusInternalServerError, e.ERROR_EDIT_ARTICLE_FAIL, nil)
+		return
+	}
+
+	appG.Response(http.StatusOK, e.SUCCESS, nil)
+}
+
+// 删除文章
+func DeleteArticle(c *gin.Context) {
+	appG := app.Gin{C: c}
+	valid := validation.Validation{}
+
+	// 获取要删除的文章的id
+	id := com.StrTo(c.Param("id")).MustInt()
+	valid.Min(id, 1, "id").Message("ID必须大于0")
+
+	if valid.HasErrors() {
+		app.MarkErrors(valid.Errors)
+		appG.Response(http.StatusOK, e.INVALID_PARAMS, nil)
+		return
+	}
+
+	articleService := article_service.Article{ID: id}
+	exists, err := articleService.ExistByID()
+	if err != nil {
+		appG.Response(http.StatusInternalServerError, e.ERROR_CHECK_EXIST_ARTICLE_FAIL, nil)
+		return
+	}
+
+	if !exists {
+		appG.Response(http.StatusOK, e.ERROR_NOT_EXIST_ARTICLE, nil)
+		return
+	}
+
+	err = articleService.Delete()
+	if err != nil {
+		appG.Response(http.StatusInternalServerError, e.ERROR_DELETE_ARTICLE_FAIL, nil)
 		return
 	}
 
