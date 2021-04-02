@@ -58,3 +58,9 @@ DELETE http://localhost:8000/api/v1/articles/2 HTTP/1.1
 content-type: application/json
 
 {}
+
+### 测试获取Token
+POST http://localhost:8000/auth HTTP/1.1
+content-type: application/json
+
+{ "username": "test", "password": "test123456" }

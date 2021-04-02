@@ -119,8 +119,6 @@ func AddArticle(c *gin.Context) {
 	)
 
 	httpCode, errCode := app.BindAndValid(c, &form)
-	fmt.Printf("%#v, %#v\n", httpCode, errCode)
-	fmt.Println(form)
 	if errCode != e.SUCCESS {
 		appG.Response(httpCode, errCode, nil)
 		return
