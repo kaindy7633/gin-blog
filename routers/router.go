@@ -4,7 +4,12 @@ import (
 	"gin-blog/routers/api"
 	v1 "gin-blog/routers/api/v1"
 
+	_ "gin-blog/docs"
+
+	ginSwagger "github.com/swaggo/gin-swagger"
+
 	"github.com/gin-gonic/gin"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
 // InitRouter initialize routing information
@@ -18,7 +23,7 @@ func InitRouter() *gin.Engine {
 	// r.StaticFS("/qrcode", http.Dir(qrcode.GetQrCodeFullPath()))
 
 	r.POST("/auth", api.GetAuth)
-	// r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	// r.POST("/upload", api.UploadImage)
 
 	apiv1 := r.Group("/api/v1")

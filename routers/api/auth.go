@@ -15,6 +15,13 @@ type auth struct {
 	Password string `form:"password" json:"password" valid:"Required;MaxSize(50)"`
 }
 
+// @Summary 获取授权
+// @Produce  json
+// @Param username query string true "userName"
+// @Param password query string true "password"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /auth [post]
 func GetAuth(c *gin.Context) {
 	var form auth
 	appG := app.Gin{C: c}

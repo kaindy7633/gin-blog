@@ -15,7 +15,14 @@ import (
 	"github.com/unknwon/com"
 )
 
-// 获取所有文章列表
+// @Summary 获取多篇文章
+// @Produce  json
+// @Param tag_id body int false "TagID"
+// @Param state body int false "State"
+// @Param created_by body int false "CreatedBy"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /api/v1/articles [get]
 func GetArticles(c *gin.Context) {
 	appG := app.Gin{C: c}
 	valid := validation.Validation{}
@@ -64,7 +71,12 @@ func GetArticles(c *gin.Context) {
 	appG.Response(http.StatusOK, e.SUCCESS, data)
 }
 
-// 获取指定id的文章
+// @Summary 获取单个文章
+// @Produce  json
+// @Param id path int true "ID"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /api/v1/articles/{id} [get]
 func GetArticle(c *gin.Context) {
 	// 获取id
 	appG := app.Gin{C: c}
@@ -111,7 +123,17 @@ type AddArticleForm struct {
 	State     int    `form:"state" json:"state" valid:"Range(0,1)"`
 }
 
-// 新建文章
+// @Summary 新增文章
+// @Produce  json
+// @Param tag_id body int true "TagID"
+// @Param title body string true "Title"
+// @Param desc body string true "Desc"
+// @Param content body string true "Content"
+// @Param created_by body string true "CreatedBy"
+// @Param state body int true "State"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /api/v1/articles [post]
 func AddArticle(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -165,7 +187,18 @@ type EditArticleForm struct {
 	State      int    `form:"state" json:"state" valid:"Range(0,1)"`
 }
 
-// 更新文章
+// @Summary 更新文章
+// @Produce  json
+// @Param id path int true "ID"
+// @Param tag_id body string false "TagID"
+// @Param title body string false "Title"
+// @Param desc body string false "Desc"
+// @Param content body string false "Content"
+// @Param modified_by body string true "ModifiedBy"
+// @Param state body int false "State"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /api/v1/articles/{id} [put]
 func EditArticle(c *gin.Context) {
 	var (
 		appG = app.Gin{C: c}
@@ -222,7 +255,12 @@ func EditArticle(c *gin.Context) {
 	appG.Response(http.StatusOK, e.SUCCESS, nil)
 }
 
-// 删除文章
+// @Summary 删除文章
+// @Produce  json
+// @Param id path int true "ID"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /api/v1/articles/{id} [delete]
 func DeleteArticle(c *gin.Context) {
 	appG := app.Gin{C: c}
 	valid := validation.Validation{}
